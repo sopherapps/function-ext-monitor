@@ -31,7 +31,7 @@ This package provides a decorator to wrap around a function so that a report is 
       # generate values when the function is called
       'timestamp': lambda _: datetime.datetime.now(),
       'headers': {
-          # Any custom headers. Again, fell free to pass in a function
+          # Any custom headers. Again, feel free to pass in a function
           # to generate headers on the fly,
           'Authorization': 'Bearer your-auth-token',
         }
