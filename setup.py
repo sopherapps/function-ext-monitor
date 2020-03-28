@@ -10,7 +10,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="function-ext-monitor",
-    version="0.0.2",
+    version="0.0.3",
     description="This package provides a decorator to wrap around a function so that a report is sent to external server every time function runs.",
     long_description=README,
     long_description_content_type="text/markdown",
