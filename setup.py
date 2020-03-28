@@ -24,7 +24,6 @@ setup(
         "Programming Language :: Python :: 3.6",
     ],
     packages=find_packages(exclude=("test",)),
-    py_modules=['main'],
     include_package_data=True,
     install_requires=["requests"],
     entry_points={

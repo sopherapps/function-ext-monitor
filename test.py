@@ -2,10 +2,8 @@ import unittest
 import socket
 import json
 import requests
-import multiprocessing
+from function_ext_monitor import external_function_monitor
 from unittest import mock
-
-from main import external_function_monitor
 
 PASSING_URL = 'http://passing-url.com/test.json'
 NON_EXISTENT_URL = 'http://passing-url-does-not-exist.com/anothertest.json'
@@ -43,12 +41,6 @@ def mocked_requests_post(*args, **kwargs):
         return MockResponse({"error": "value2"}, 500)
 
     return MockResponse(None, 404)
-
-    #
-    # def mocked_multiprocessing_process_start(**kwargs):
-    #     """Mocks the Process class from multiprocessing"""
-
-    # return MockProcess(**kwargs)
 
 
 class MockProcess:

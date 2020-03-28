@@ -4,9 +4,6 @@ import requests
 import multiprocessing
 
 
-# from multiprocessing import Process
-
-
 def send_report(report_server_url, data_as_dict={}, headers={}):
     """
     Makes a POST request to the report server. Ideally,
