@@ -3,7 +3,7 @@ import json
 import requests
 import multiprocessing
 
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 
 def send_report(report_server_url, data_as_dict={}, headers={}):
