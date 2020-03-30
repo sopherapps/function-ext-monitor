@@ -6,13 +6,22 @@ import multiprocessing
 __version__ = "0.0.4"
 
 
+def convert_functions_in_dict_to_values(dict_to_convert):
+    """
+    When passed a dictionary that contains functions as some of its
+    values, it converts them to their responses
+    """
+    return {key: value() if hasattr(value, '__call__') else value for key, value in dict_to_convert.items()}
+
+
 def send_report(report_server_url, data_as_dict={}, headers={}):
     """
     Makes a POST request to the report server. Ideally,
     the server should be able to upsert the old record
     because this POST request will be made every time the function is run
     """
-    response = requests.post(report_server_url, data=json.dumps(data_as_dict),
+    processed_data = convert_functions_in_dict_to_values(data_as_dict)
+    response = requests.post(report_server_url, data=json.dumps(processed_data),
                              headers={'Content-Type': 'application/json', **headers})
     if not response.ok:
         raise requests.exceptions.HTTPError('Sending report failed. \nresponse:\n %s' % response.reason)

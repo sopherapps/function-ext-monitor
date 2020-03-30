@@ -2,12 +2,23 @@ import unittest
 import socket
 import json
 import requests
+
 from function_ext_monitor import external_function_monitor
 from unittest import mock
 
 PASSING_URL = 'http://passing-url.com/test.json'
 NON_EXISTENT_URL = 'http://passing-url-does-not-exist.com/anothertest.json'
 EXTRA_DATA_TO_SEND = {'interval': 6, 'foo': 'bar'}
+
+
+class Counter:
+    counter = 1
+
+    @classmethod
+    def increment_counter(cls):
+        """Just a function that increments a class counter and return it"""
+        cls.counter += 1
+        return cls.counter
 
 
 def mocked_requests_post(*args, **kwargs):
@@ -107,6 +118,38 @@ class TestFunctionExtMonitor(unittest.TestCase):
         """
         self.assertRaises(requests.exceptions.HTTPError,
                           simple_addition_with_misconfigured_decorator, self.first_number, self.second_number)
+
+    @mock.patch('multiprocessing.Process', new=MockProcess)
+    @mock.patch('requests.post', side_effect=mocked_requests_post)
+    def test_extra_data_dict_with_function_values(self, mock_post):
+        """
+        The decorator should convert values that are functions in the kwargs of the
+        decorator to their return values at the time of when the function runs.
+        Good for timestamps
+        """
+        new_extra_data = {**EXTRA_DATA_TO_SEND, 'counter': lambda: Counter.increment_counter()}
+
+        @external_function_monitor(PASSING_URL, **new_extra_data)
+        def another_simple_addition(first_number, second_number):
+            """
+            Just adds the first number to the second number and returns the sum
+            """
+            return first_number + second_number
+
+        original_counter = Counter.counter
+        for loop in range(1, 4):
+            # call the function
+            another_simple_addition(self.first_number, self.second_number)
+            # the value in counter should have also increased by 1
+            data_parameter_as_dict = {
+                'function_name': 'another_simple_addition',
+                'host_name': socket.gethostname(),
+                **EXTRA_DATA_TO_SEND,
+                'counter': original_counter + loop
+            }
+            self.assertIn(mock.call(PASSING_URL,
+                                    data=json.dumps(data_parameter_as_dict),
+                                    headers={'Content-Type': 'application/json'}), mock_post.call_args_list)
 
 
 if __name__ == '__main__':

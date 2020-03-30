@@ -20,6 +20,7 @@ This package provides a decorator to wrap around a function so that a report is 
 - Given that the function you wish to monitor is the `simple_addition` function in the code below,here is how you would go about it.
 
   ```python
+  import datetime
   from function_ext_monitor import external_function_monitor
 
   EXTRA_DATA_TO_SEND = {
@@ -27,11 +28,12 @@ This package provides a decorator to wrap around a function so that a report is 
       'interval_in_seconds': 7,
       # maybe who wrote it
       'author': 'John Doe',
-      # even functions can be added to dynamically
+      # even functions without arguments can be added to dynamically
       # generate values when the function is called
-      'timestamp': lambda _: datetime.datetime.now(),
+      # They should return something JSON serializable
+      'timestamp': lambda: str(datetime.datetime.now()),
       'headers': {
-          # Any custom headers. Again, fell free to pass in a function
+          # Any custom headers. Again, feel free to pass in a function
           # to generate headers on the fly,
           'Authorization': 'Bearer your-auth-token',
         }
@@ -53,6 +55,10 @@ This package provides a decorator to wrap around a function so that a report is 
   - It also adds `'Content-Type': 'application/json'` to the headers
   - It sends the data by spinning up a separate process so that interference with the running program is minimal
   - Every time the function it decorates (in the above example `simple_addition`) runs, a POST request is sent the remote server specified in the first argument. It is upto the developer to decide whether they will overwrite the existing record for that function or to keep a continuously growing log of records on that function.
+
+## Acknowledgment
+
+The [RealPython post on python packaging](https://realpython.com/pypi-publish-python-package/) was very helpful when I was publishing this package.
 
 ## License
 
