@@ -20,6 +20,7 @@ This package provides a decorator to wrap around a function so that a report is 
 - Given that the function you wish to monitor is the `simple_addition` function in the code below,here is how you would go about it.
 
   ```python
+  import datetime
   from function_ext_monitor import external_function_monitor
 
   EXTRA_DATA_TO_SEND = {
@@ -27,9 +28,10 @@ This package provides a decorator to wrap around a function so that a report is 
       'interval_in_seconds': 7,
       # maybe who wrote it
       'author': 'John Doe',
-      # even functions can be added to dynamically
+      # even functions without arguments can be added to dynamically
       # generate values when the function is called
-      'timestamp': lambda _: datetime.datetime.now(),
+      # They should return something JSON serializable
+      'timestamp': lambda: str(datetime.datetime.now()),
       'headers': {
           # Any custom headers. Again, feel free to pass in a function
           # to generate headers on the fly,
