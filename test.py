@@ -2,9 +2,8 @@ import unittest
 import socket
 import json
 import requests
-from datetime import datetime
 
-from function_ext_monitor import external_function_monitor, convert_functions_in_dict_to_values
+from function_ext_monitor import external_function_monitor
 from unittest import mock
 
 PASSING_URL = 'http://passing-url.com/test.json'
