@@ -54,6 +54,10 @@ This package provides a decorator to wrap around a function so that a report is 
   - It sends the data by spinning up a separate process so that interference with the running program is minimal
   - Every time the function it decorates (in the above example `simple_addition`) runs, a POST request is sent the remote server specified in the first argument. It is upto the developer to decide whether they will overwrite the existing record for that function or to keep a continuously growing log of records on that function.
 
+## Acknowledgment
+
+The [RealPython post on python packaging](https://realpython.com/pypi-publish-python-package/) was very helpful when I was publishing this package.
+
 ## License
 
 Copyright (c) 2020 Martin Ahindura Licensed under the [MIT License](./LICENSE)
