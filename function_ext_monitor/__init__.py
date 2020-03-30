@@ -3,7 +3,7 @@ import json
 import requests
 import multiprocessing
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"
 
 
 def convert_functions_in_dict_to_values(dict_to_convert):
