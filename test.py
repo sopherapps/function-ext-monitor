@@ -64,6 +64,15 @@ class MockProcess:
         self.target(*self.args, **self.kwargs)
 
 
+class SampleClass:
+    """A sample class to provide a method"""
+
+    @external_function_monitor(PASSING_URL, **EXTRA_DATA_TO_SEND)
+    def sample_method(self):
+        """A sample method that just gets called some times"""
+        pass
+
+
 @external_function_monitor(PASSING_URL, **EXTRA_DATA_TO_SEND)
 def simple_addition(first_number, second_number):
     """
@@ -80,7 +89,6 @@ def simple_addition_with_misconfigured_decorator(first_number, second_number):
     and returns the sum
     """
     return first_number + second_number
-
 
 class TestFunctionExtMonitor(unittest.TestCase):
     """
@@ -150,6 +158,25 @@ class TestFunctionExtMonitor(unittest.TestCase):
             self.assertIn(mock.call(PASSING_URL,
                                     data=json.dumps(data_parameter_as_dict),
                                     headers={'Content-Type': 'application/json'}), mock_post.call_args_list)
+
+    @mock.patch('multiprocessing.Process', new=MockProcess)
+    @mock.patch('requests.post', side_effect=mocked_requests_post)
+    def test_send_report_for_class_method(self, mock_post):
+        """
+        The decorator should be able to send a report every time
+        the function is called with the full name of the method, including the class name
+        """
+        sample_object = SampleClass()
+        sample_object.sample_method()
+
+        data_parameter_as_dict = {
+            'function_name': 'SampleClass.sample_method',
+            'host_name': socket.gethostname(),
+            **EXTRA_DATA_TO_SEND
+        }
+        self.assertIn(mock.call(PASSING_URL,
+                                data=json.dumps(data_parameter_as_dict),
+                                headers={'Content-Type': 'application/json'}), mock_post.call_args_list)
 
 
 if __name__ == '__main__':
