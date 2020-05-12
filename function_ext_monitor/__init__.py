@@ -4,7 +4,7 @@ import json
 import requests
 import multiprocessing
 
-__version__ = "0.0.5"
+__version__ = "0.0.6"
 
 
 def get_class_that_defined_method(method):
