@@ -1,7 +1,6 @@
 # function-ext-monitor
 
 This package provides a decorator to wrap around a function so that a report is sent to external server every time function runs.
-**under heavy development**
 
 ## Dependencies
 
@@ -52,6 +51,7 @@ This package provides a decorator to wrap around a function so that a report is 
   **Note**
 
   - By default, the decorator includes the name of the computer and the name of the function in the data sent to the remote endpoint.
+  - If the decorator is around a method of a class, the full name in the format `Class_name.method_name` is sent to the remote endpoint.
   - It also adds `'Content-Type': 'application/json'` to the headers
   - It sends the data by spinning up a separate process so that interference with the running program is minimal
   - Every time the function it decorates (in the above example `simple_addition`) runs, a POST request is sent the remote server specified in the first argument. It is upto the developer to decide whether they will overwrite the existing record for that function or to keep a continuously growing log of records on that function.
