@@ -150,7 +150,7 @@ class TestFunctionExtMonitor(unittest.TestCase):
             another_simple_addition(self.first_number, self.second_number)
             # the value in counter should have also increased by 1
             data_parameter_as_dict = {
-                'function_name': 'another_simple_addition',
+                'function_name': 'TestFunctionExtMonitor.another_simple_addition',
                 'host_name': socket.gethostname(),
                 **EXTRA_DATA_TO_SEND,
                 'counter': original_counter + loop
